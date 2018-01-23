@@ -216,14 +216,46 @@ public class EulerianPath {
         for (String n: nodes) {
             vertexes.add(new Vertex<String>(n));
         }
-        for (DigraphEdge e:edges) {
-            g.addEdge(vertexes.get(e.getPrefixIndex()),vertexes.get(e.getSuffixIndex()));
+        
+        int[] out = new int[nodes.size()];
+        int[] in = new int[nodes.size()];     
+        for(int i = 0; i < edges.size(); i++){
+            int prefix = edges.get(i).getPrefixIndex();
+            int suffix = edges.get(i).getSuffixIndex();
+            g.addEdge(vertexes.get(prefix),vertexes.get(suffix));
+            
+            out[prefix]++;
+            in[suffix]++;
+        }     
+        int startIndex = -1;
+        int endIndex = -1;       
+        for(int i = 0; i < nodes.size(); i++)
+        {
+            out[i] -= in[i];
+            if(out[i] == 1)
+                startIndex = i;
+            else if(out[i] == -1)
+                endIndex = i;
         }
-        List<Edge<String>> path = g.findHierholzerPath(vertexes.get(3), vertexes.get(0)); //tak jak w przykladzie poczatek w AC, jakies przesuniecia z wykladu dalej??
+        
+        /*
+        for (DigraphEdge e:edges) {
+            g.addEdge(vertexes.get(e.getPrefixIndex()),vertexes.get(e.getSuffixIndex()));                         
+        }*/
+        
+        //List<Edge<String>> path = g.findHierholzerPath(vertexes.get(3), vertexes.get(0)); //tak jak w przykladzie poczatek w AC, jakies przesuniecia z wykladu dalej??       
+        if(startIndex == -1 || endIndex == -1){
+            System.out.println ("\nNo Eulerian path exists!");
+            return null;
+        }
+       
+        List<Edge<String>> path = g.findHierholzerPath(vertexes.get(startIndex), vertexes.get(endIndex));
         ArrayList<String> result = new ArrayList<>();
         for (Edge<String> e: path) {
             result.add(e.start.label);
         }
+        result.add(path.get(path.size() - 1).end.label);
+        
         return result;
     }
 }

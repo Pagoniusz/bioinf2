@@ -107,19 +107,21 @@ public class Main {
 
     public static void printCompleteResult(ArrayList<String> result){
         System.out.println("Path: ");
-        for (String s:result) {
-            System.out.print(s);
-            if (!s.equals(result.get(result.size()-1)))
-                System.out.print(" --> ");
+        for(int i = 0; i<result.size() - 1; i++)
+        {
+            System.out.print(result.get(i));
+            System.out.print(" --> ");
         }
+        System.out.print(result.get(result.size() - 1)); // ostatni brakuj¹cy node
+        
         System.out.println();
         System.out.println("Spektrum:");
         String spectrum="";
-        for (String s:result) {
-            if (result.indexOf(s) != result.size()-1)
-                spectrum+=s.substring(0,s.length()-1);
-            else
-                spectrum+=s.substring(0,s.length());
+        
+        spectrum+=result.get(0);  
+        for (int i = 1; i < result.size(); i++) {
+            String s = result.get(i);
+            spectrum+=s.substring(s.length()-1,s.length());
         }
         System.out.println(spectrum);
     }
